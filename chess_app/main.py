@@ -1,7 +1,6 @@
-import os
+import copy
 
-# Main file for our chess application.
-# This will contain the game logic.
+# This file contains the core chess game logic.
 
 def create_board():
     """
@@ -68,11 +67,13 @@ def make_move(board, start_pos, end_pos, turn):
     """
     Moves a piece on the board from start_pos to end_pos.
     Validates that the player is moving their own piece.
+    Returns a new board object with the move made.
     """
+    new_board = copy.deepcopy(board)
     start_row, start_col = start_pos
     end_row, end_col = end_pos
 
-    piece = board[start_row][start_col]
+    piece = new_board[start_row][start_col]
     if piece == ' ':
         raise ValueError("The starting square is empty.")
 
@@ -83,36 +84,6 @@ def make_move(board, start_pos, end_pos, turn):
     if turn == 'black' and is_white_piece:
         raise ValueError("It is Black's turn, but you tried to move a White piece.")
 
-    board[end_row][end_col] = piece
-    board[start_row][start_col] = ' '
-    return board
-
-if __name__ == '__main__':
-    game_board = create_board()
-    turn = 'white'
-
-    while True:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("A new game of chess has started!")
-        print_board(game_board)
-
-        prompt = f"{turn.capitalize()}'s move (e.g., e2e4) or 'exit' to quit: "
-        move_str = input(prompt)
-
-        if move_str.lower() == 'exit':
-            print("Thanks for playing!")
-            break
-
-        try:
-            start_pos, end_pos = parse_move(move_str)
-            game_board = make_move(game_board, start_pos, end_pos, turn)
-
-            # Switch turns
-            if turn == 'white':
-                turn = 'black'
-            else:
-                turn = 'white'
-
-        except ValueError as e:
-            print(f"\nError: {e}")
-            input("Press Enter to continue...")
+    new_board[end_row][end_col] = piece
+    new_board[start_row][start_col] = ' '
+    return new_board

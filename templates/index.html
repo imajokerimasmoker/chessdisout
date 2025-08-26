@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No-JS Chess</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>No-JS Chess</h1>
+    <p>A simple, privacy-respecting chess game.</p>
+
+    <div id="board">
+        <!-- The board will be rendered here by Flask -->
+        {{ board_table|safe }}
+    </div>
+
+    <div id="controls">
+        <h2>Make your move</h2>
+        <form action="/move" method="post">
+            <label for="from_square">From:</label>
+            <input type="text" id="from_square" name="from_square" size="4" placeholder="e.g., e2">
+            <label for="to_square">To:</label>
+            <input type="text" id="to_square" name="to_square" size="4" placeholder="e.g., e4">
+            <button type="submit">Make Move</button>
+        </form>
+        <form action="/new" method="post" style="margin-top: 10px;">
+            <button type="submit">New Game</button>
+        </form>
+    </div>
+
+    <div id="info">
+        <h3>{{ turn.capitalize() }}'s Turn</h3>
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }}</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
